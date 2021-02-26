@@ -367,4 +367,41 @@ Hosts/Net:      126
 Ошибок при разбение не нашел
 
 # 2. Практика
+В вагрант файлик пропишем некоторые особености 
+1. пропишем сети в iptables.
+```ruby
+iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
+ip route add 192.168.0.0/16 via 192.168.255.2
+```
+Удалим дефолтные маршруты
+```ruby
+echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+```
+для удобства пользования внесем правки /etc/hosts
+```ruby
+   sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
+			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
+			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
+			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
+			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
+			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
+			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
+```
+Проверим доступность нашей сети
+```ruby
+[vagrant@centralServer ~]$ ping inetRouter
+PING inetRouter (192.168.255.1) 56(84) bytes of data.
+64 bytes from inetRouter (192.168.255.1): icmp_seq=1 ttl=63 time=0.810 ms
+64 bytes from inetRouter (192.168.255.1): icmp_seq=2 ttl=63 time=0.843 ms
+64 bytes from inetRouter (192.168.255.1): icmp_seq=3 ttl=63 time=0.813 ms
+64 bytes from inetRouter (192.168.255.1): icmp_seq=4 ttl=63 time=0.765 ms
+```
+```ruby
+[vagrant@office1Server ~]$ ping office1Router
+PING office1Router (192.168.254.2) 56(84) bytes of data.
+64 bytes from office1Router (192.168.254.2): icmp_seq=1 ttl=64 time=0.442 ms
+64 bytes from office1Router (192.168.254.2): icmp_seq=2 ttl=64 time=0.417 ms
+64 bytes from office1Router (192.168.254.2): icmp_seq=3 ttl=64 time=0.398 ms
+```
 
