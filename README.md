@@ -380,13 +380,13 @@ echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
 ```
 для удобства пользования внесем правки /etc/hosts
 ```ruby
-   sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
-			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
-			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
-			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
-			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
-			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
-			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
+sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
+sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
+sudo echo "192.168.254.2 office1Router" >> /etc/hosts
+sudo echo "192.168.253.2 office2Router" >> /etc/hosts
+sudo echo "192.168.0.2 centralServer" >> /etc/hosts
+sudo echo "192.168.2.2 office1Server" >> /etc/hosts
+sudo echo "192.168.1.2 office2Server" >> /etc/hosts
 ```
 Проверим доступность нашей сети
 ```ruby
