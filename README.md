@@ -211,49 +211,7 @@ central	directors	192.168.0.0/28 		192.168.0.1	192.168.0.14	192.168.0.15	14
 	office hardware	192.168.0.32/28		192.168.0.33	192.168.0.46	192.168.0.47	14
 	wifi		192.168.0.64/26		192.168.0.65	192.168.0.126	192.168.0.127	62
 
-<html xmlns:v="urn:schemas-microsoft-com:vml"
-xmlns:o="urn:schemas-microsoft-com:office:office"
-xmlns:x="urn:schemas-microsoft-com:office:excel"
-xmlns="http://www.w3.org/TR/REC-html40">
 
-<head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1251">
-<meta name=ProgId content=Excel.Sheet>
-<meta name=Generator content="Microsoft Excel 15">
-<link id=Main-File rel=Main-File href="../�����1.htm">
-<link rel=File-List href=filelist.xml>
-<link rel=Stylesheet href=stylesheet.css>
-<style>
-<!--table
-	{mso-displayed-decimal-separator:"\,";
-	mso-displayed-thousand-separator:" ";}
-@page
-	{margin:.75in .7in .75in .7in;
-	mso-header-margin:.3in;
-	mso-footer-margin:.3in;}
--->
-</style>
-<![if !supportTabStrip]><script language="JavaScript">
-<!--
-function fnUpdateTabs()
- {
-  if (parent.window.g_iIEVer>=4) {
-   if (parent.document.readyState=="complete"
-    && parent.frames['frTabs'].document.readyState=="complete")
-   parent.fnSetActiveSheet(0);
-  else
-   window.setTimeout("fnUpdateTabs();",150);
- }
-}
-
-if (window.name!="frSheet")
- window.location.replace("../�����1.htm");
-else
- fnUpdateTabs();
-//-->
-</script>
-<![endif]>
-</head>
 
 <body link="#0563C1" vlink="#954F72">
 
@@ -267,9 +225,9 @@ else
  <col width=111 style='mso-width-source:userset;mso-width-alt:4059;width:83pt'>
  <col width=64 style='width:48pt'>
  <tr height=20 style='height:15.0pt'>
-  <td height=20 class=xl67 width=98 style='height:15.0pt;width:74pt'>C���</td>
-  <td class=xl67 width=104 style='border-left:none;width:78pt'>��������</td>
-  <td class=xl67 width=124 style='border-left:none;width:93pt'>�������</td>
+  <td height=20 class=xl67 width=98 style='height:15.0pt;width:74pt'>Cеть</td>
+  <td class=xl67 width=104 style='border-left:none;width:78pt'>Название</td>
+  <td class=xl67 width=124 style='border-left:none;width:93pt'>Подсеть</td>
   <td class=xl67 width=118 style='border-left:none;width:89pt'>Hostmin</td>
   <td class=xl67 width=118 style='border-left:none;width:89pt'>Hostmax</td>
   <td class=xl67 width=111 style='border-left:none;width:83pt'>Broadcast</td>
@@ -324,7 +282,7 @@ else
   <td height=20 class=xl65 style='height:15.0pt;border-top:none'>&nbsp;</td>
   <td class=xl65 style='border-top:none;border-left:none'>test servers</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.1.128/26<span
-  style='mso-spacerun:yes'>��</span></td>
+  style='mso-spacerun:yes'>  </span></td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.1.129</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.1.190</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.1.191</td>
@@ -334,7 +292,7 @@ else
   <td height=20 class=xl65 style='height:15.0pt;border-top:none'>&nbsp;</td>
   <td class=xl65 style='border-top:none;border-left:none'>office hardware</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.1.192/26<span
-  style='mso-spacerun:yes'>�</span></td>
+  style='mso-spacerun:yes'> </span></td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.1.193</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.1.254</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.1.255</td>
@@ -344,7 +302,7 @@ else
   <td height=20 class=xl66 style='height:15.0pt;border-top:none'>central</td>
   <td class=xl65 style='border-top:none;border-left:none'>directors</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.0.0/28<span
-  style='mso-spacerun:yes'>�</span></td>
+  style='mso-spacerun:yes'> </span></td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.0.1</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.0.14</td>
   <td class=xl65 style='border-top:none;border-left:none'>192.168.0.15</td>
@@ -384,4 +342,3 @@ else
 </body>
 
 </html>
-
