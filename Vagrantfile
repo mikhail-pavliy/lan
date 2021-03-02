@@ -2,67 +2,58 @@
 # vim: set ft=ruby :
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
-
 MACHINES = {
-    :inetRouter => {
+  :inetRouter => {
         :box_name => "centos/7",
         :net => [
-                   {ip: '192.168.255.1', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-loc"},
+                   {ip: '192.168.255.1', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
                 ]
   },
   :centralRouter => {
         :box_name => "centos/7",
         :net => [
-                   {ip: '192.168.255.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-loc"},
-                   {ip: '192.168.0.1', adapter: 3, netmask: "255.255.255.240", virtualbox__intnet: "directors-loc"},
-                   {ip: '192.168.0.33', adapter: 4, netmask: "255.255.255.240", virtualbox__intnet: "ohw-loc"},
-                   {ip: '192.168.0.65', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "wifi-loc"},
+                   {ip: '192.168.255.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+                   {ip: '192.168.0.1', adapter: 3, netmask: "255.255.255.240", virtualbox__intnet: "dir-net"},
+                   {ip: '192.168.0.33', adapter: 4, netmask: "255.255.255.240", virtualbox__intnet: "hw-net"},
+                   {ip: '192.168.0.65', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "mgt-net"},
+					{ip: '192.168.255.5', adapter: 6, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
+					{ip: '192.168.255.9', adapter: 7, netmask: "255.255.255.252", virtualbox__intnet: "router-net"}
                 ]
   },
-  
-  :office1Router => {
-    	:box_name => "centos/7",
-    	:net => [
-               {ip: '192.168.254.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office1Router"},
-               {ip: '192.168.2.1', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "office1-dev-loc"},
-               {ip: '192.168.2.65', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "office1-testservers-loc"},
-               {ip: '192.168.2.129', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "office1-managers-loc"},
-               {ip: '192.168.2.193', adapter: 6, netmask: "255.255.255.192", virtualbox__intnet: "office1-hardware-loc"}
-            ]
-  },
-  
-  :office2Router => {
-   	 :box_name => "centos/7",
-   	 :net => [
-              {ip: '192.168.253.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "office2Router"},
-              {ip: '192.168.1.1', adapter: 3, netmask: "255.255.255.128", virtualbox__intnet: "office2-dev-loc"},
-              {ip: '192.168.1.129', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "office2-testservers-loc"},
-              {ip: '192.168.1.193', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "office2-hardware-loc"}
-            ]
-  }, 
-
-   :centralServer => {
+   :office1Router => {
         :box_name => "centos/7",
         :net => [
-                   {ip: '192.168.0.2', adapter: 2, netmask: "255.255.255.240", virtualbox__intnet: "directors-loc"}
+                   {ip: '192.168.2.1', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "office1-net"},
+                   {ip: '192.168.255.6', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
                 ]
   },
-  
-  
-  :office1Server => {
-    :box_name => "centos/7",
-    :net => [
-               {ip: '192.168.2.2', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "office1-dev-loc"}
-            ]
+   :office2Router => {
+        :box_name => "centos/7",
+        :net => [
+                   {ip: '192.168.1.1', adapter: 2, netmask: "255.255.255.128", virtualbox__intnet: "office2-net"},
+                   {ip: '192.168.255.10', adapter: 3, netmask: "255.255.255.252", virtualbox__intnet: "router-net"}
+                ]
   },
-
-    
+  :centralServer => {
+        :box_name => "centos/7",
+        :net => [
+                   {ip: '192.168.0.2', adapter: 2, netmask: "255.255.255.240", virtualbox__intnet: "dir-net"},
+                ]
+  },
+ 
+  :office1Server => {
+        :box_name => "centos/7",
+        :net => [
+                   {ip: '192.168.2.2', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "office1-net"}
+                ]
+  },
+ 
   :office2Server => {
-    :box_name => "centos/7",
-    :net => [
-               {ip: '192.168.1.2', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "office2-dev-loc"}
-            ]
-  }
+        :box_name => "centos/7",
+        :net => [
+                   {ip: '192.168.1.2', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "office2-net"}
+                ]
+  },
 }
 
 Vagrant.configure("2") do |config|
@@ -89,116 +80,145 @@ Vagrant.configure("2") do |config|
         
         case boxname.to_s
         when "inetRouter"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            sudo bash -c 'echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf'; sudo sysctl -p
-            sudo yum install -y iptables-services; sudo systemctl enable iptables && sudo systemctl start iptables;
-            sudo iptables -F; sudo iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE; sudo service iptables save
-            sudo bash -c 'echo "192.168.0.0/16 via 192.168.255.2 dev eth1" > /etc/sysconfig/network-scripts/route-eth1'; sudo systemctl restart network
+	  box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "256"]
+          end
+			box.vm.provision "shell", run: "always", inline: <<-SHELL
+            iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
+			iptables-save > /etc/firewall.conf
+			echo "/sbin/iptables-restore < /etc/firewall.conf" >> /etc/rc.d/rc.local && chmod +x /etc/rc.d/rc.local
+            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.d/99-sysctl.conf && sysctl -p
             sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
 			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
-			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
-			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
+			sudo echo "192.168.2.1 office1Router" >> /etc/hosts
+			sudo echo "192.168.1.1 office2Router" >> /etc/hosts
 			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
 			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
 			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
-            sudo reboot
-            SHELL
+			sudo reboot
+			SHELL
         when "centralRouter"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            sudo bash -c 'echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf'; sudo sysctl -p
+			box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "256"]
+          end  
+			box.vm.provision "shell", run: "always", inline: <<-SHELL
+            iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth1 -j MASQUERADE
+            iptables-save > /etc/firewall.conf
+            echo "/sbin/iptables-restore < /etc/firewall.conf" >> /etc/rc.d/rc.local && chmod +x /etc/rc.d/rc.local
+			echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.d/99-sysctl.conf && sysctl -p
             echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            sudo nmcli connection modify "System eth1" +ipv4.addresses "192.168.254.1/30"; sudo nmcli connection modify "System eth1" +ipv4.addresses "192.168.253.1/30"
-            sudo bash -c 'echo "192.168.2.0/24 via 192.168.254.2 dev eth1" > /etc/sysconfig/network-scripts/route-eth1'
-            sudo bash -c 'echo "192.168.1.0/24 via 192.168.253.2 dev eth1" >> /etc/sysconfig/network-scripts/route-eth1'
             echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
+			echo "192.168.1.0/24 via 192.168.255.10" > /etc/sysconfig/network-scripts/route-eth6
+			echo "192.168.2.0/24 via 192.168.255.6" > /etc/sysconfig/network-scripts/route-eth5
+            systemctl restart network
+			sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
 			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
-			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
-			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
+			sudo echo "192.168.2.1 office1Router" >> /etc/hosts
+			sudo echo "192.168.1.1 office2Router" >> /etc/hosts
 			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
 			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
 			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
-            sudo reboot
-            SHELL
-        when "office1Router"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            sudo bash -c 'echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf'; sudo sysctl -p
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.254.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
-			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
-			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
-			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
-			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
-			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
-			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
-            sudo reboot
-            SHELL
-		when "office2Router"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            sudo bash -c 'echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf'; sudo sysctl -p
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.253.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
-			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
-			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
-			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
-			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
-			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
-			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
-            sudo reboot
-            SHELL
-	    when "centralServer"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
+			sudo reboot
+			SHELL
+        when "centralServer"
+	  box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "256"]
+          end
+			box.vm.provision "shell", run: "always", inline: <<-SHELL
             echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
             echo "GATEWAY=192.168.0.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-             sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
+            systemctl restart network
+			sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
 			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
-			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
-			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
+			sudo echo "192.168.2.1 office1Router" >> /etc/hosts
+			sudo echo "192.168.1.1 office2Router" >> /etc/hosts
 			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
 			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
 			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
-            sudo reboot
+			sudo reboot
             SHELL
-        when "office1Server"
+	when "office1Router"
+          box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "256"]
+          end
           box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+            iptables -t nat -A POSTROUTING ! -d 192.168.2.0/24 -o eth2 -j MASQUERADE
+			iptables-save > /etc/firewall.conf
+			echo "/sbin/iptables-restore < /etc/firewall.conf" >> /etc/rc.d/rc.local && chmod +x /etc/rc.d/rc.local
+            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.d/99-sysctl.conf && sysctl -p
+            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+            echo "GATEWAY=192.168.255.5" >> /etc/sysconfig/network-scripts/ifcfg-eth2
+			echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.2.1\nNETMASK=255.255.255.192\nDEVICE=eth1:0" > /etc/sysconfig/network-scripts/ifcfg-eth1:0
+			echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.2.1\nNETMASK=255.255.255.192\nDEVICE=eth1:1" > /etc/sysconfig/network-scripts/ifcfg-eth1:1
+			echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.2.193\nNETMASK=255.255.255.192\nDEVICE=eth1:2" > /etc/sysconfig/network-scripts/ifcfg-eth1:2
+            systemctl restart network
+			sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
+			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
+			sudo echo "192.168.2.1 office1Router" >> /etc/hosts
+			sudo echo "192.168.1.1 office2Router" >> /etc/hosts
+			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
+			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
+			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
+			sudo reboot
+			SHELL
+	when "office1Server"
+	  box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "256"]
+	  end
+			box.vm.provision "shell", run: "always", inline: <<-SHELL
+            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
             echo "GATEWAY=192.168.2.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
+            systemctl restart network
+			sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
 			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
-			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
-			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
+			sudo echo "192.168.2.1 office1Router" >> /etc/hosts
+			sudo echo "192.168.1.1 office2Router" >> /etc/hosts
 			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
 			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
 			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
-            sudo reboot
-            SHELL
-        
-         when "office2Server"
-           box.vm.provision "shell", run: "always", inline: <<-SHELL
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+			sudo reboot
+			SHELL
+	when "office2Router"
+			box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "256"]
+			end
+			box.vm.provision "shell", run: "always", inline: <<-SHELL
+			iptables -t nat -A POSTROUTING ! -d 192.168.1.0/24 -o eth2 -j MASQUERADE
+            iptables-save > /etc/firewall.conf
+            echo "/sbin/iptables-restore < /etc/firewall.conf" >> /etc/rc.d/rc.local && chmod +x /etc/rc.d/rc.local
+            echo net.ipv4.conf.all.forwarding=1 >> /etc/sysctl.d/99-sysctl.conf && sysctl -p            
+			echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+            echo "GATEWAY=192.168.255.9" >> /etc/sysconfig/network-scripts/ifcfg-eth2
+			echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.1\nNETMASK=255.255.255.192\nDEVICE=eth1:0" > /etc/sysconfig/network-scripts/ifcfg-eth1:0
+            echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.193\nNETMASK=255.255.255.192\nDEVICE=eth1:1" > /etc/sysconfig/network-scripts/ifcfg-eth1:1
+            systemctl restart network
+			sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
+			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
+			sudo echo "192.168.2.1 office1Router" >> /etc/hosts
+			sudo echo "192.168.1.1 office2Router" >> /etc/hosts
+			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
+			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
+			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
+			sudo reboot
+          SHELL
+	when "office2Server"
+          box.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "256"]
+          end
+          box.vm.provision "shell", run: "always", inline: <<-SHELL
+            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
             echo "GATEWAY=192.168.1.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-            sudo systemctl restart network
-            sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
+            systemctl restart network
+			sudo echo "192.168.255.1 inetRouter" >> /etc/hosts
 			sudo echo "192.168.255.2 centralRouter" >> /etc/hosts
-			sudo echo "192.168.254.2 office1Router" >> /etc/hosts
-			sudo echo "192.168.253.2 office2Router" >> /etc/hosts
+			sudo echo "192.168.2.1 office1Router" >> /etc/hosts
+			sudo echo "192.168.1.1 office2Router" >> /etc/hosts
 			sudo echo "192.168.0.2 centralServer" >> /etc/hosts
 			sudo echo "192.168.2.2 office1Server" >> /etc/hosts
 			sudo echo "192.168.1.2 office2Server" >> /etc/hosts
-            sudo reboot
-            SHELL
+			sudo reboot
+          SHELL
         end
-
       end
-
   end
-  
-  
 end
