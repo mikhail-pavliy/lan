@@ -404,4 +404,46 @@ PING office1Router (192.168.254.2) 56(84) bytes of data.
 64 bytes from office1Router (192.168.254.2): icmp_seq=2 ttl=64 time=0.417 ms
 64 bytes from office1Router (192.168.254.2): icmp_seq=3 ttl=64 time=0.398 ms
 ```
+```ruby
+[vagrant@office1Server ~]$ ping mail.ru
+PING mail.ru (217.69.139.202) 56(84) bytes of data.
+64 bytes from mail.ru (217.69.139.202): icmp_seq=1 ttl=57 time=143 ms
+64 bytes from mail.ru (217.69.139.202): icmp_seq=2 ttl=57 time=114 ms
+```
+```ruby
+[vagrant@office2Server ~]$ ping mail.ru
+PING mail.ru (217.69.139.202) 56(84) bytes of data.
+64 bytes from mail.ru (217.69.139.202): icmp_seq=1 ttl=57 time=110 ms
+64 bytes from mail.ru (217.69.139.202): icmp_seq=2 ttl=57 time=111 ms
+```
+```ruby
+[vagrant@centralServer ~]$ ping mail.ru
+PING mail.ru (217.69.139.202) 56(84) bytes of data.
+64 bytes from mail.ru (217.69.139.202): icmp_seq=1 ttl=59 time=129 ms
+64 bytes from mail.ru (217.69.139.202): icmp_seq=2 ttl=59 time=111 ms
+```
+```ruby
+[vagrant@office1Server ~]$ ping office2Server
+PING office2Server (192.168.1.2) 56(84) bytes of data.
+64 bytes from office2Server (192.168.1.2): icmp_seq=1 ttl=61 time=1.36 ms
+64 bytes from office2Server (192.168.1.2): icmp_seq=2 ttl=61 time=1.51 ms
+```
+```ruby
+[vagrant@office1Server ~]$ ping centralServer
+PING centralServer (192.168.0.2) 56(84) bytes of data.
+64 bytes from centralServer (192.168.0.2): icmp_seq=1 ttl=62 time=1.09 ms
+64 bytes from centralServer (192.168.0.2): icmp_seq=2 ttl=62 time=1.23 ms
+```
+```ruby
+[vagrant@office1Router ~]$ ping centralServer
+PING centralServer (192.168.0.2) 56(84) bytes of data.
+64 bytes from centralServer (192.168.0.2): icmp_seq=1 ttl=63 time=0.753 ms
+64 bytes from centralServer (192.168.0.2): icmp_seq=2 ttl=63 time=0.809 ms
+```
+```ruby
+[vagrant@centralRouter ~]$ ping office2Server
+PING office2Server (192.168.1.2) 56(84) bytes of data.
+64 bytes from office2Server (192.168.1.2): icmp_seq=1 ttl=63 time=0.845 ms
+64 bytes from office2Server (192.168.1.2): icmp_seq=2 ttl=63 time=0.807 ms
+```
 
